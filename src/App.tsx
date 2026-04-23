@@ -1,11 +1,11 @@
 import './App.css'
+import { PokemonTest } from './components/PokemonTest'
 
 function App() {
-  const port = import.meta.env.PORT || '5000'
   return (
     <>
       <div>
-        <h1>Rodando na porta: {port}</h1>
+        <PokemonTest />
       </div>
     </>
   )
