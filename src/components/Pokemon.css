@@ -4,6 +4,7 @@
   align-items: center;
   gap: 1rem;
   text-align: center;
+  width: 100%;
 }
 
 .pokemon__controls {
@@ -12,6 +13,7 @@
   justify-content: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .pokemon__navigator {
@@ -47,6 +49,7 @@
   border-radius: 999px;
   outline: none;
   font-size: 0.95rem;
+  box-sizing: border-box;
 }
 
 .pokemon button {
@@ -60,6 +63,7 @@
   cursor: pointer;
   box-shadow: 0 4px 0 #1d4ed8;
   overflow-wrap: anywhere;
+  box-sizing: border-box;
 }
 
 .pokemon button:disabled {
@@ -78,6 +82,9 @@
 @media (max-width: 640px) {
   .pokemon {
     gap: 0.7rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
 
   .pokemon .pokemon__title {
@@ -89,13 +96,14 @@
     width: 100%;
     flex-direction: column;
     gap: 0.6rem;
-    overflow-x: clip;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
 
   .pokemon input,
   .pokemon button {
     width: 100%;
-    max-width: 320px;
+    max-width: none;
     box-sizing: border-box;
   }
 
@@ -107,6 +115,8 @@
   .pokemon__navigator {
     width: 100%;
     justify-content: center;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
 
   .pokemon__navigator-actions {
@@ -116,8 +126,9 @@
   }
 
   .pokemon__navigator-actions button {
-    width: calc(50% - 0.3rem);
+    width: calc(50% - 0.22rem);
     min-width: 0;
-    max-width: 160px;
+    max-width: none;
+    box-sizing: border-box;
   }
 }
