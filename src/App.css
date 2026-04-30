@@ -31,6 +31,7 @@
   font-family: 'Press Start 2P', monospace;
   font-size: 0.58rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .app__content {
@@ -38,4 +39,40 @@
   border-radius: 14px;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.9);
+  overflow-x: clip;
+}
+
+@media (max-width: 640px) {
+  .app {
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem 0.35rem 0.8rem;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-x: clip;
+  }
+
+  .app__header {
+    padding: 0.7rem 0.45rem;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+
+  .app__title {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+
+  .app__subtitle {
+    font-size: 0.46rem;
+    line-height: 1.4;
+  }
+
+  .app__content {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
 }

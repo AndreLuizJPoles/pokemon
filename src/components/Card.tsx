@@ -1,7 +1,7 @@
 import type { PokemonData } from './Pokemon'
 import './Card.css'
 import { pokeapiService } from '../api/pokeapi/pokeapiService'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type TypeApiResponse = {
   sprites?: {
@@ -10,6 +10,11 @@ type TypeApiResponse = {
         name_icon?: string | null
       }
     }
+  }
+  damage_relations?: {
+    double_damage_from: { name: string }[]
+    half_damage_from: { name: string }[]
+    no_damage_from: { name: string }[]
   }
 }
 
@@ -51,12 +56,16 @@ type EvolutionChainResponse = {
 
 export function Card({ pokemon }: { pokemon: PokemonData }) {
   const [typesWithIcon, setTypesWithIcon] = useState<PokemonTypeWithIcon[]>([])
+  const [weaknesses, setWeaknesses] = useState<string[]>([])
+  const [resistances, setResistances] = useState<string[]>([])
   const [showShiny, setShowShiny] = useState(false)
+  const [isCryPlaying, setIsCryPlaying] = useState(false)
   const [flavorText, setFlavorText] = useState('')
   const [genus, setGenus] = useState('')
   const [isLegendary, setIsLegendary] = useState(false)
   const [isMythical, setIsMythical] = useState(false)
   const [evolutionPaths, setEvolutionPaths] = useState<string[][]>([])
+  const cryRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     const fetchTypes = async () => {
@@ -74,6 +83,18 @@ export function Card({ pokemon }: { pokemon: PokemonData }) {
       )
 
       setTypesWithIcon(nextTypesWithIcon)
+
+      const weaknessSet = new Set<string>()
+      const resistanceSet = new Set<string>()
+
+      responses.forEach((typeData: TypeApiResponse) => {
+        typeData.damage_relations?.double_damage_from.forEach((type) => weaknessSet.add(type.name))
+        typeData.damage_relations?.half_damage_from.forEach((type) => resistanceSet.add(type.name))
+        typeData.damage_relations?.no_damage_from.forEach((type) => resistanceSet.add(type.name))
+      })
+
+      setWeaknesses(Array.from(weaknessSet))
+      setResistances(Array.from(resistanceSet))
     }
 
     fetchTypes()
@@ -114,6 +135,22 @@ export function Card({ pokemon }: { pokemon: PokemonData }) {
     (showShiny ? pokemon.shinyImage : null) ??
     pokemon.officialArtwork ??
     pokemon.image
+
+  const handleCryToggle = () => {
+    if (!cryRef.current) {
+      return
+    }
+
+    if (isCryPlaying) {
+      cryRef.current.pause()
+      cryRef.current.currentTime = 0
+      setIsCryPlaying(false)
+      return
+    }
+
+    void cryRef.current.play()
+    setIsCryPlaying(true)
+  }
 
   return (
     <div className="card">
@@ -179,6 +216,12 @@ export function Card({ pokemon }: { pokemon: PokemonData }) {
         <p>{pokemon.moves.join(', ')}</p>
       </div>
 
+      <div className="card__section">
+        <h3>Fraquezas e Resistencia</h3>
+        <p><strong>Fraco contra:</strong> {weaknesses.length > 0 ? weaknesses.join(', ') : '-'}</p>
+        <p><strong>Resiste a:</strong> {resistances.length > 0 ? resistances.join(', ') : '-'}</p>
+      </div>
+
       {flavorText && (
         <div className="card__section">
           <h3>Pokedex</h3>
@@ -198,7 +241,15 @@ export function Card({ pokemon }: { pokemon: PokemonData }) {
       {pokemon.cries && (
         <div className="card__section">
           <h3>Cry</h3>
-          <audio controls src={pokemon.cries}>
+          <button type="button" className="card__cry-button" onClick={handleCryToggle}>
+            {isCryPlaying ? 'Parar cry' : 'Ouvir cry'}
+          </button>
+          <audio
+            ref={cryRef}
+            src={pokemon.cries}
+            onEnded={() => setIsCryPlaying(false)}
+            hidden
+          >
             Seu navegador nao suporta audio.
           </audio>
         </div>

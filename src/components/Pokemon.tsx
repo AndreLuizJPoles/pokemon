@@ -57,18 +57,12 @@ export function Pokemon() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSearch = async () => {
-    const normalizedName = pokemonName.trim().toLowerCase()
-    if (!normalizedName) {
-      setError('Digite o nome de um Pokemon.')
-      return
-    }
-
+  const fetchPokemon = async (identifier: string) => {
     setLoading(true)
     setError('')
 
     try {
-      const data = await pokeapiService.getPokemon(normalizedName)
+      const data = await pokeapiService.getPokemon(identifier)
       setPokemon({
         id: data.id,
         name: data.name,
@@ -92,12 +86,44 @@ export function Pokemon() {
         baseExperience: data.base_experience,
         cries: data.cries?.latest ?? null,
       })
+      setPokemonName(data.name)
     } catch {
       setPokemon(null)
-      setError('Nao foi possivel buscar esse Pokemon.')
+      setError('Não foi possível buscar esse Pokémon.')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSearch = async () => {
+    const normalizedName = pokemonName.trim().toLowerCase()
+    if (!normalizedName) {
+      setError('Digite o nome de um Pokemon.')
+      return
+    }
+
+    await fetchPokemon(normalizedName)
+  }
+
+  const handleRandom = async () => {
+    const randomId = Math.floor(Math.random() * 1025) + 1
+    await fetchPokemon(String(randomId))
+  }
+
+  const handlePrevious = async () => {
+    if (!pokemon || pokemon.id <= 1) {
+      return
+    }
+
+    await fetchPokemon(String(pokemon.id - 1))
+  }
+
+  const handleNext = async () => {
+    if (!pokemon) {
+      return
+    }
+
+    await fetchPokemon(String(pokemon.id + 1))
   }
 
   return (
@@ -108,16 +134,38 @@ export function Pokemon() {
           type="text"
           value={pokemonName}
           onChange={(event) => setPokemonName(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              void handleSearch()
+            }
+          }}
           placeholder="Ex: pikachu"
         />
         <button type="button" onClick={handleSearch} disabled={loading}>
           {loading ? 'Buscando...' : 'Buscar Pokemon'}
         </button>
+        <button type="button" onClick={handleRandom} disabled={loading}>
+          Aleatorio
+        </button>
       </div>
+
+      {pokemon && (
+        <div className="pokemon__navigator">
+          <span className="pokemon__navigator-id">#{pokemon.id}</span>
+          <div className="pokemon__navigator-actions">
+            <button type="button" onClick={handlePrevious} disabled={loading || pokemon.id <= 1}>
+              Anterior
+            </button>
+            <button type="button" onClick={handleNext} disabled={loading}>
+              Proximo
+            </button>
+          </div>
+        </div>
+      )}
 
       {error && <p>{error}</p>}
 
-      {pokemon && <Card pokemon={pokemon} />}
+      {pokemon && <Card key={pokemon.id} pokemon={pokemon} />}
     </section>
   )
 }
