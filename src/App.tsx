@@ -1,11 +1,11 @@
 import './App.css'
-import { PokemonTest } from './components/PokemonTest'
+import { Pokemon } from './components/Pokemon'
 
 function App() {
   return (
     <>
       <div>
-        <PokemonTest />
+        <Pokemon />
       </div>
     </>
   )

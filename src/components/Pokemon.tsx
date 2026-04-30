@@ -1,16 +1,25 @@
 import { useState } from 'react'
 import { pokeapiService } from '../api/pokeapi/pokeapiService'
+import { Card } from './Card'
+import './Pokemon.css'
 
-type PokemonData = {
+export type PokemonData = {
   id: number
   name: string
   height: number
   weight: number
   image: string
+  types: string[]
 }
 
-export function PokemonTest() {
-  const [pokemonName, setPokemonName] = useState('pikachu')
+type PokemonTypeEntry = {
+  type: {
+    name: string
+  }
+}
+
+export function Pokemon() {
+  const [pokemonName, setPokemonName] = useState('')
   const [pokemon, setPokemon] = useState<PokemonData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -33,6 +42,7 @@ export function PokemonTest() {
         height: data.height,
         weight: data.weight,
         image: data.sprites.front_default,
+        types: data.types.map((type: PokemonTypeEntry) => type.type.name),
       })
     } catch {
       setPokemon(null)
@@ -43,29 +53,23 @@ export function PokemonTest() {
   }
 
   return (
-    <section>
-      <h2>Teste da PokeAPI</h2>
-      <input
-        type="text"
-        value={pokemonName}
-        onChange={(event) => setPokemonName(event.target.value)}
-        placeholder="Ex: pikachu"
-      />
-      <button type="button" onClick={handleSearch} disabled={loading}>
-        {loading ? 'Buscando...' : 'Buscar Pokemon'}
-      </button>
+    <section className="pokemon">
+      <h2 className='pokemon__title'>Busque por um Pokemon</h2>
+      <div className="pokemon__controls">
+        <input
+          type="text"
+          value={pokemonName}
+          onChange={(event) => setPokemonName(event.target.value)}
+          placeholder="Ex: pikachu"
+        />
+        <button type="button" onClick={handleSearch} disabled={loading}>
+          {loading ? 'Buscando...' : 'Buscar Pokemon'}
+        </button>
+      </div>
 
       {error && <p>{error}</p>}
 
-      {pokemon && (
-        <div>
-          <p>Nome: {pokemon.name}</p>
-          <p>ID: {pokemon.id}</p>
-          <p>Altura: {pokemon.height}</p>
-          <p>Peso: {pokemon.weight}</p>
-          <img src={pokemon.image} alt={pokemon.name} />
-        </div>
-      )}
+      {pokemon && <Card pokemon={pokemon} />}
     </section>
   )
 }
