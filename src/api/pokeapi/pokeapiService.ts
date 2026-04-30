@@ -11,9 +11,14 @@ export const pokeapiService = {
   },
   getType: async (name: string) => {
     const response = await pokeapiClient.get(pokeapiEndpoints.types.types(name))
-
-    console.log(response.data)
-
+    return response.data
+  },
+  getSpecies: async (name: string) => {
+    const response = await pokeapiClient.get(pokeapiEndpoints.species.species(name))
+    return response.data
+  },
+  getEvolutionChain: async (url: string) => {
+    const response = await pokeapiClient.get(url)
     return response.data
   }
 }
