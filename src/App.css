@@ -70,7 +70,7 @@
   }
 
   .app__content {
-    padding: 0;
+    padding: 0 0 2rem 0;
     border: none;
     border-radius: 0;
     background: transparent;
