@@ -1,6 +1,7 @@
 import type { PokemonData } from './Pokemon'
 import './Card.css'
 import { pokeapiService } from '../api/pokeapi/pokeapiService'
+import { getCombinedTypeEffectiveness } from '../utils/typeEffectiveness'
 import { useEffect, useRef, useState } from 'react'
 
 type TypeApiResponse = {
@@ -84,17 +85,11 @@ export function Card({ pokemon }: { pokemon: PokemonData }) {
 
       setTypesWithIcon(nextTypesWithIcon)
 
-      const weaknessSet = new Set<string>()
-      const resistanceSet = new Set<string>()
+      const { weaknesses: nextWeaknesses, resistances: nextResistances } =
+        getCombinedTypeEffectiveness(responses)
 
-      responses.forEach((typeData: TypeApiResponse) => {
-        typeData.damage_relations?.double_damage_from.forEach((type) => weaknessSet.add(type.name))
-        typeData.damage_relations?.half_damage_from.forEach((type) => resistanceSet.add(type.name))
-        typeData.damage_relations?.no_damage_from.forEach((type) => resistanceSet.add(type.name))
-      })
-
-      setWeaknesses(Array.from(weaknessSet))
-      setResistances(Array.from(resistanceSet))
+      setWeaknesses(nextWeaknesses)
+      setResistances(nextResistances)
     }
 
     fetchTypes()
