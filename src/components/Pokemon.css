@@ -1,0 +1,134 @@
+.pokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.pokemon__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.pokemon__navigator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.pokemon__navigator-id {
+  min-width: 58px;
+  padding: 0.35rem 0.5rem;
+  border: 2px solid #111827;
+  border-radius: 999px;
+  background: #ffffff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+}
+
+.pokemon__navigator-actions {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-width: 0;
+}
+
+.pokemon input {
+  width: 250px;
+  padding: 0.7rem 0.9rem;
+  border: 3px solid #111827;
+  border-radius: 999px;
+  outline: none;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.pokemon button {
+  padding: 0.72rem 1.2rem;
+  border: 3px solid #111827;
+  border-radius: 999px;
+  background-color: #ffcc00;
+  color: #111827;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.58rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1d4ed8;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+.pokemon button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.pokemon .pokemon__title {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  letter-spacing: 3px;
+  color: #ffcc00;
+  text-shadow: -2px 0 #1e3a8a, 0 2px #1e3a8a, 2px 0 #1e3a8a, 0 -2px #1e3a8a;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .pokemon {
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .pokemon .pokemon__title {
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+  }
+
+  .pokemon__controls {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .pokemon input,
+  .pokemon button {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .pokemon button {
+    font-size: 0.52rem;
+    padding: 0.68rem 0.8rem;
+  }
+
+  .pokemon__navigator {
+    width: 100%;
+    justify-content: center;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .pokemon__navigator-actions {
+    width: 100%;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .pokemon__navigator-actions button {
+    width: calc(50% - 0.22rem);
+    min-width: 0;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
